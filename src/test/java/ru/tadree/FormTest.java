@@ -1,18 +1,31 @@
 package ru.tadree;
 
 import com.codeborne.selenide.Configuration;
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import pages.PracticeFormPage;
 
-import java.io.File;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selectors.byText;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
 
 public class FormTest {
+
+    Faker faker = new Faker();
+
+    String firstName = faker.name().firstName();
+    String lastName = faker.name().lastName();
+    String email = faker.internet().emailAddress();
+    String gender = faker.demographic().sex();
+    String phone = faker.numerify("##########");
+    String day = "1";
+    String month = "January";
+    String year = "2000";
+    String subject = "Biology";
+    String hobby = "Music";
+    String picture = "DZ2.png";
+    String currentAddress = faker.address().fullAddress();
+    String state = "Uttar Pradesh";
+    String city = "Agra";
+
 
     PracticeFormPage practiceFormPage = new PracticeFormPage();
 
@@ -27,25 +40,31 @@ public class FormTest {
         practiceFormPage.openPage();
 
         //заполнение формы
-        practiceFormPage.typeFirstName("Elena")
-                .typeLastName("Nikitina")
-                .typeEmail("test@test.ru")
-                .selectGender("Other")
-                .typePhone("0123456789")
+        practiceFormPage.typeFirstName(firstName)
+                .typeLastName(lastName)
+                .typeEmail(email)
+                .selectGender(gender)
+                .typePhone(phone)
                 .setDateOfBirth("01","January", "2000")
-                .setSubject("Physics")
-                .setHobby("Music")
-                .uploadPicture("DZ2.png")
-                .setCurrentAddress("test")
+                .setSubject(subject)
+                .setHobby(hobby)
+                .uploadPicture(picture)
+                .setCurrentAddress(currentAddress)
                 .setState("Uttar Pradesh")
                 .setCity("Agra")
                 .submit();
 
         //проверка введенных данных
-        practiceFormPage.checkResultsValue("Elena" + " " + "Nikitina");
-        $(".table-responsive").shouldHave(text("Elena Nikitina"), text("test@test.ru"),
-                text("Other"), text("0123456789"), text("01 January,2000"), text("Physics"),
-                text("Music"), text("DZ2.png"), text("test"), text("Uttar Pradesh Agra"));
+        practiceFormPage.checkResultsValue(firstName + " " + lastName)
+                .checkResultsValue(email)
+                .checkResultsValue(gender)
+                .checkResultsValue(phone)
+                .checkResultsValue(day + " " + month + "," + year)
+                .checkResultsValue(subject)
+                .checkResultsValue(hobby)
+                .checkResultsValue(picture)
+                .checkResultsValue(currentAddress)
+                .checkResultsValue(state + " " + city);
 
     }
 }

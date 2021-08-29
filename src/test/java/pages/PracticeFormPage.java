@@ -86,7 +86,8 @@ public class PracticeFormPage {
         return this;
     }
 
-    public void checkResultsValue(String value) {
+    public PracticeFormPage checkResultsValue(String value) {
         modal.$(".table-responsive").shouldHave(text(value));
+        return this;
     }
 }
